@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Angular build output
+dist/
+
+# Angular cache
+.angular/cache/
+
+# Environment (OS)
+.DS_Store
