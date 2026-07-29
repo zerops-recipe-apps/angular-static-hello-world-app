@@ -1,7 +1,7 @@
 # Angular Hello World Recipe App
 
 <!-- #ZEROPS_EXTRACT_START:intro# -->
-A minimal [Angular](https://angular.dev) application deployed as a static site on [Zerops](https://zerops.io) — built with the Angular CLI and served by Nginx, with build-time environment variable injection via `environment.ts`.
+A minimal [Angular](https://angular.dev) static SPA deployed on [Zerops](https://zerops.io) — built with the Angular CLI and served by Nginx, with build-time metadata via `scripts/generate-build-env.js`.
 Used within [Angular Hello World recipe](https://app.zerops.io/recipes/angular-hello-world) for [Zerops](https://zerops.io) platform.
 <!-- #ZEROPS_EXTRACT_END:intro# -->
 
@@ -31,19 +31,10 @@ zerops:
 
       buildCommands:
         - npm ci
-
-        # Inject build-time values into environment.ts before compilation.
-        # Angular compiles environment.ts into the bundle — these values
-        # are baked in at build time and cannot change at runtime.
-        #
-        # RUNTIME_APP_ENV is the Zerops RUNTIME_ prefix pattern: set
-        # APP_ENV as a runtime env var and Zerops exposes it as
-        # RUNTIME_APP_ENV in the build shell automatically.
-        - sed -i "s/__APP_ENV__/${RUNTIME_APP_ENV:-production}/" src/environments/environment.ts
-        - sed -i "s/__BUILD_TIME__/$(date -u +%Y-%m-%dT%H:%M:%SZ)/" src/environments/environment.ts
-        - |
-          sed -i "s/__ANGULAR_VERSION__/$(node -e "process.stdout.write(require('./node_modules/@angular/core/package.json').version)")/g" src/environments/environment.ts
-
+        # Generate src/environments/build-env.ts with the actual Angular
+        # version, build timestamp, and environment — esbuild inlines
+        # this into the client bundle at build time.
+        - node scripts/generate-build-env.js
         - npm run build
 
       # Strip the 'dist/angular-hello-world/browser/' prefix — its
@@ -86,6 +77,10 @@ zerops:
       # (ng serve) or any other Angular CLI command via SSH.
       base: nodejs@22
       os: ubuntu
+
+      ports:
+        - port: 4200
+          httpSupport: true
 
       # Keep the container alive without starting a server.
       # The developer starts ng serve manually via SSH.
