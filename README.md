@@ -27,7 +27,7 @@ zerops:
       # Build with Node.js (npm/npx/ng), serve compiled output with Nginx.
       # The build container runs the Angular compiler — Node.js is NOT
       # present at runtime. Only static HTML/CSS/JS reaches Nginx.
-      base: nodejs@22
+      base: nodejs@24
 
       buildCommands:
         - npm ci
@@ -57,7 +57,7 @@ zerops:
 
   - setup: dev
     build:
-      base: nodejs@22
+      base: nodejs@24
       os: ubuntu
 
       buildCommands:
@@ -73,9 +73,9 @@ zerops:
         - node_modules
 
     run:
-      # nodejs@22 runtime so the developer can run 'npm start'
+      # nodejs@24 runtime so the developer can run 'npm start'
       # (ng serve) or any other Angular CLI command via SSH.
-      base: nodejs@22
+      base: nodejs@24
       os: ubuntu
 
       ports:

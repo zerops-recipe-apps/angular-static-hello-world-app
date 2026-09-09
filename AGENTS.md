@@ -5,7 +5,7 @@ Angular 22 static SPA built with the Angular CLI and served by Nginx on Zerops, 
 ## Zerops service facts
 
 - HTTP port: dev `4200` (`npm start` / `ng serve`) / prod `80` (Nginx static runtime)
-- Runtime base: dev `nodejs@22` / prod `static` (Nginx)
+- Runtime base: dev `nodejs@24` / prod `static` (Nginx)
 
 ## Zerops dev
 
